@@ -1,4 +1,10 @@
-# Functional json 
+# Functional json  [![travis-badge][]][travis] [![jar-badge][]][jar]
+
+[travis]:               https://travis-ci.org/MAIF/functional-json
+[travis-badge]:         https://travis-ci.org/MAIF/functional-json.svg?branch=master
+[jar]:                  https://bintray.com/maif-functional-json/maven/functional-json/_latestVersion
+[jar-badge]:            https://api.bintray.com/packages/maif-functional-json/maven/functional-json/images/download.svg
+
 
 This library inspired by [playframeork scala json](https://github.com/playframework/play-json) lib and [json-lib](https://github.com/mathieuancelin/json-lib) provide helpers to manipulate [Jackson](https://github.com/FasterXML/jackson) json nodes. 
 With this lib you can have a total control on json serialization and deserialization. 
