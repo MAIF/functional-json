@@ -28,8 +28,10 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static fr.maif.json.Json.$$;
-import static io.vavr.API.*;
+import static io.vavr.API.Match;
+import static io.vavr.API.None;
+import static io.vavr.API.Some;
+import static io.vavr.API.Tuple;
 
 /**
  * A functional interface to describe a json to T reader.

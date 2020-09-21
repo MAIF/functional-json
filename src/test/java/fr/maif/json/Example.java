@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import lombok.experimental.FieldNameConstants;
 import org.junit.Test;
 
