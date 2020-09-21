@@ -10,7 +10,11 @@ scalaVersion := "2.12.12"
 lazy val root = (project in file("."))
   .settings(publishCommonsSettings: _*)
 
-val res = Seq("jitpack.io" at "https://jitpack.io")
+val res = Seq(
+  "jitpack.io" at "https://jitpack.io",
+  Resolver.jcenterRepo,
+  Resolver.bintrayRepo("maif-functional-json", "maven")
+)
 
 resolvers ++= res
 
@@ -25,8 +29,12 @@ libraryDependencies ++= Seq(
   "com.github.everit-org.json-schema"   % "org.everit.json.schema"    % "1.12.1" % Test
 )
 
+val javaVersion = "8"
 
-javacOptions in Compile ++= Seq("-source", "8", "-target", "8", "-Xlint:unchecked", "-Xlint:deprecation")
+javacOptions ++= Seq("-source", javaVersion, "-target", javaVersion)
+javacOptions in (Compile, compile) ++= Seq("-target", javaVersion, "-Xlint:unchecked")
+// Skip the javadoc for the moment
+sources in(Compile, doc) := Seq.empty
 
 testFrameworks := Seq(TestFrameworks.JUnit)
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-v")
@@ -72,9 +80,7 @@ lazy val publishCommonsSettings = Seq(
   resolvers ++= res,
   bintrayOrganization := Some("maif-functional-json"),
   bintrayRepository := "maven",
-  pomIncludeRepository := { _ =>
-    false
-  }
+  pomIncludeRepository := { _ => false }
 )
 
 

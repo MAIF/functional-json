@@ -1,7 +1,7 @@
 package fr.maif.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.json.JsonWriteFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,7 +66,7 @@ public class Json {
                 writer = writer.with(SerializationFeature.INDENT_OUTPUT);
             }
             if (escapeNonASCII) {
-                writer = writer.with(JsonGenerator.Feature.ESCAPE_NON_ASCII);
+                writer = writer.with(JsonWriteFeature.ESCAPE_NON_ASCII);
             }
             return writer.writeValueAsString(o);
         } catch (IOException e) {
