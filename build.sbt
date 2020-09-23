@@ -3,7 +3,7 @@ import ReleaseTransformations._
 
 organization := "fr.maif"
 
-name := "functional-json"
+  name := "functional-json"
 
 scalaVersion := "2.12.12"
 
@@ -13,7 +13,7 @@ lazy val root = (project in file("."))
 val res = Seq(
   "jitpack.io" at "https://jitpack.io",
   Resolver.jcenterRepo,
-  Resolver.bintrayRepo("maif-functional-json", "maven")
+  Resolver.bintrayRepo("maif-functional-java", "maven")
 )
 
 resolvers ++= res
@@ -78,7 +78,7 @@ lazy val publishCommonsSettings = Seq(
   publishArtifact in Test := false,
   bintrayVcsUrl := Some(s"scm:git:git@github.com:$githubRepo.git"),
   resolvers ++= res,
-  bintrayOrganization := Some("maif-functional-json"),
+  bintrayOrganization := Some("maif-functional-java"),
   bintrayRepository := "maven",
   pomIncludeRepository := { _ => false }
 )
