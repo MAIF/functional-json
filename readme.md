@@ -23,7 +23,7 @@ This lib has also helpers to build json from scratch easily than with raw jackso
 
 ## Import
 
-Jcentral hosts this library.
+Jcenter hosts this library.
 
 ### Maven
 
@@ -31,13 +31,13 @@ Jcentral hosts this library.
 <dependency>
     <groupId>fr.maif</groupId>
     <artifactId>functional-json</artifactId>
-    <version>1.0.0-BETA2</version>
+    <version>${VERSION}</version>
 </dependency>
 ```
 
 ### Gradle
 ```
-implementation 'fr.maif:functional-json:1.0.0-BETA2'
+implementation 'fr.maif:functional-json:${VERSION}'
 ```
 
 ## Creating json 
