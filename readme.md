@@ -96,9 +96,9 @@ And the reader is the following:
 
 ```java
 public static JsonRead<Viking> reader() {
-    return _string(Fields.firstName, Viking.builder()::firstName)
-            .and(_string(Fields.lastName), Viking.VikingBuilder::lastName)
-            .and(_opt(Fields.city, _string()), Viking.VikingBuilder::city)
+    return _string("firstName", Viking.builder()::firstName)
+            .and(_string("lastName"), Viking.VikingBuilder::lastName)
+            .and(_opt("city", _string()), Viking.VikingBuilder::city)
             .map(Viking.VikingBuilder::build);
 } 
 ```
@@ -108,32 +108,32 @@ To a better understanding, here is the decomposition of the previous code :
 
 This read a string at path "firstName"
 ```java
-JsonRead<String> stringJsonRead = _string(Fields.firstName);
+JsonRead<String> stringJsonRead = _string("firstName");
 ```
 
 There is an alternative, that read a string at a path in order to use this string to do something else.
 Here create a builder and apply the string to the firstName field
 ```java
-JsonRead<VikingBuilder> vikingBuilderJsonRead = _string(Fields.firstName, str -> Viking.builder().firstName(str));
+JsonRead<VikingBuilder> vikingBuilderJsonRead = _string("firstName", str -> Viking.builder().firstName(str));
 ```
 
 The same with method reference : 
 ```java
-JsonRead<VikingBuilder> vikingBuilderJsonRead2 = _string(Fields.firstName, Viking.builder()::firstName);
+JsonRead<VikingBuilder> vikingBuilderJsonRead2 = _string("firstName", Viking.builder()::firstName);
 ```
 
 Now we can use `and`. 
 With `and` you can read another field and combine with the current builder like this :   
 ```java
 JsonRead<VikingBuilder> vikingBuilderJsonReadStep2 = vikingBuilderJsonRead2
-    .and(_string(Fields.lastName), (previousBuilder, str) -> previousBuilder.lastName(str));
+    .and(_string("lastName"), (previousBuilder, str) -> previousBuilder.lastName(str));
 ```
 
 Or with method reference : 
 
 ```java
 JsonRead<VikingBuilder> vikingBuilderJsonReadStep2 = vikingBuilderJsonRead2
-    .and(_string(Fields.lastName), VikingBuilder::lastName);
+    .and(_string("lastName"), VikingBuilder::lastName);
 ```
 At the end when all the field are read, we can use `map` to transform the builder in the Viking instance : 
 
@@ -151,9 +151,9 @@ Wiring all together we'll have
 
 ```java
 public static JsonRead<Viking> reader() {
-    return _string(Fields.firstName, Viking.builder()::firstName)
-            .and(_string(Fields.lastName), Viking.VikingBuilder::lastName)
-            .and(_opt(Fields.city, _string()), Viking.VikingBuilder::city)
+    return _string("firstName", Viking.builder()::firstName)
+            .and(_string("lastName"), Viking.VikingBuilder::lastName)
+            .and(_opt("city", _string()), Viking.VikingBuilder::city)
             .map(Viking.VikingBuilder::build);
 } 
 ```
@@ -195,9 +195,9 @@ To define a json object or arrays there is helpers so for the viking pojo a writ
 ```java
 public static JsonWrite<Viking> writer() {
     return viking -> Json.obj(
-            $(Fields.firstName, viking.firstName),
-            $(Fields.lastName, viking.lastName),
-            $(Fields.city, viking.city)
+            $("firstName", viking.firstName),
+            $("lastName", viking.lastName),
+            $("city", viking.city)
     );
 }
 ``` 
@@ -241,17 +241,17 @@ public class Viking {
     }
 
     public static JsonRead<Viking> reader() {
-        return _string(Fields.firstName, Viking.builder()::firstName)
-                .and(_string(Fields.lastName), Viking.VikingBuilder::lastName)
-                .and(_opt(Fields.city, _string()), Viking.VikingBuilder::city)
+        return _string("firstName", Viking.builder()::firstName)
+                .and(_string("lastName"), Viking.VikingBuilder::lastName)
+                .and(_opt("city", _string()), Viking.VikingBuilder::city)
                 .map(Viking.VikingBuilder::build);
     }
 
     public static JsonWrite<Viking> writer() {
         return viking -> Json.obj(
-                $(Fields.firstName, viking.firstName),
-                $(Fields.lastName, viking.lastName),
-                $(Fields.city, viking.city)
+                $("firstName", viking.firstName),
+                $("lastName", viking.lastName),
+                $("city", viking.city)
         );
     }
 
