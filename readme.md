@@ -21,6 +21,25 @@ To read and write from json, there is two important interface :
 
 This lib has also helpers to build json from scratch easily than with raw jackson  
 
+## Import
+
+Jcentral hosts this library.
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>fr.maif</groupId>
+    <artifactId>functional-json</artifactId>
+    <version>1.0.0-BETA2</version>
+</dependency>
+```
+
+### Gradle
+```
+implementation 'fr.maif:functional-json:1.0.0-BETA2'
+```
+
 ## Creating json 
 
 You can create json using the `$` static function or his alias `$$` in case `$` is already in scope (eg vavr pattern matching) to create a json object.
