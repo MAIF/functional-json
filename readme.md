@@ -37,11 +37,11 @@ ObjectNode myJson = Json.obj(
         $("weight", 80),
         $("birthDate", LocalDate.of(766, 1, 1), $localdate()),
         $("sons", Json.arr(
-            Json.obj("name", "Bjorn"),
-            Json.obj("name", "Ubbe"),
-            Json.obj("name", "Hvitserk"),
-            Json.obj("name", "Sigurd"),
-            Json.obj("name", "Ivar")
+            Json.obj($("name", "Bjorn")),
+            Json.obj($("name", "Ubbe")),
+            Json.obj($("name", "Hvitserk")),
+            Json.obj($("name", "Sigurd")),
+            Json.obj($("name", "Ivar"))
         ))
 );
 ```
