@@ -1,6 +1,6 @@
 # Functional json  [![travis-badge][]][travis] [![jar-badge][]][jar]
 
-[travis]:               https://travis-ci.org/MAIF/functional-json
+[travis]:               https://travis-ci.com/github/MAIF/functional-json
 [travis-badge]:         https://travis-ci.org/MAIF/functional-json.svg?branch=master
 [jar]:                  https://bintray.com/maif-functional-java/maven/functional-json/_latestVersion
 [jar-badge]:            https://api.bintray.com/packages/maif-functional-java/maven/functional-json/images/download.svg
