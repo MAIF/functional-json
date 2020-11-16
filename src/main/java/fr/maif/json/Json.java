@@ -2,6 +2,7 @@ package fr.maif.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.json.JsonWriteFeature;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -95,6 +96,30 @@ public class Json {
      */
     public static <A> JsResult<A> fromJson(JsonNode json, JsonRead<A> jsonRead) {
         return jsonRead.read(json);
+    }
+
+    /**
+     * Converts a JsonNode to a Java value
+     *
+     * @param <A> the type of the return value.
+     * @param json Json value to convert.
+     * @param klass class A
+     * @return the JsResult value.
+     */
+    public static <A> JsResult<A> fromJson(JsonNode json, Class<A> klass) {
+        return fromJson(json, JsonRead._fromClass(klass));
+    }
+
+    /**
+     * Converts a JsonNode to a Java parametrized value
+     *
+     * @param <A> the type of the return value.
+     * @param json Json value to convert.
+     * @param typeReference type reference of the parametrized type
+     * @return the JsResult value.
+     */
+    public static <A> JsResult<A> fromJson(JsonNode json, TypeReference<A> typeReference) {
+        return fromJson(json, JsonRead._fromClass(typeReference));
     }
 
     /**
