@@ -3,7 +3,7 @@ import ReleaseTransformations._
 
 organization := "fr.maif"
 
-  name := "functional-json"
+name := "functional-json"
 
 scalaVersion := "2.12.12"
 
