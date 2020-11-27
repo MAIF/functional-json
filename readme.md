@@ -8,18 +8,18 @@
 
 This library inspired by [playframeork scala json](https://github.com/playframework/play-json) lib and [json-lib](https://github.com/mathieuancelin/json-lib) provide helpers to manipulate [Jackson](https://github.com/FasterXML/jackson) json nodes. 
 With this lib you can have a total control on json serialization and deserialization. 
-You can also separate the pojo definition of the serialization, this is helpful in hexagonal architecture. 
-Another benefit is to get various ser/der for the same class. 
+You can also separate POJO's definition from its serialization, which can be helpful in an hexagonal architecture. 
+Another benefit is to get various ser/des for the same class. 
 
-At the end you will have a better error handling so this can be very pleasant in rest api to help the client of the API to understand why the validation failed.  
+At the end you will get a better error handling which can be very pleasant in RESTful API to help the client of the API to understand why the validation has failed.
 
 
 To read and write from json, there is two important interface : 
 
-* JsonRead to read json 
-* JsonWrite to write json 
+* `JsonRead` to read json 
+* `JsonWrite` to write json 
 
-This lib has also helpers to build json from scratch easily than with raw jackson  
+This lib also comes with helpers to build json from scratch easily than with raw jackson.
 
 ## Import
 
@@ -42,7 +42,7 @@ implementation 'fr.maif:functional-json:${VERSION}'
 
 ## Creating json 
 
-You can create json using the `$` static function or his alias `$$` in case `$` is already in scope (eg vavr pattern matching) to create a json object.
+You can create json using the `$` static function or his alias `$$` in case `$` is already in scope (eg `vavr` pattern matching) to create a json object.
 
 ```java
 import fr.maif.json.Json.*;
@@ -67,7 +67,7 @@ ObjectNode myJson = Json.obj(
 
 ## JsonRead
 
-a json read is basically 
+Reading JSON is basic :
 
 ```java
 @FunctionalInterface
@@ -77,10 +77,10 @@ public interface JsonRead<T> {
     
 }
 ``` 
-where a JsResult is a `JsSuccess` or a `JsError`. The `JsError`will stack all errors, so at the end you can get a detail report of what append.
+A `JsResult` can rather be a `JsSuccess` or a `JsError`. The `JsError` will stack all errors, in order to let you a detailed report of what happend.
 
 
-With a lambda you can define a read as  
+With a lambda you can define a read this way :
 
 ```java
 JsonRead<String> strRead = json -> {
@@ -92,12 +92,12 @@ JsonRead<String> strRead = json -> {
 };
 ```
 
-This lib already provides reader for all common type so you probably won't have to write this kind of code. 
+This lib already provides reader for all common types so you probably won't have to write this kind of code. 
 
-If you need to write a reader for a Pojo, this will look like this : 
+If you need to implement a specific reader for a POJO, this will look like this.
 
+The POJO with a builder and immutable fields. 
 
-The pojo with a builder and immutable fields. 
 The `@FieldNameConstants` is a lombock annotation that will create a sub class with static fields with the name of each fields. 
 
 ```java
@@ -111,7 +111,7 @@ public static class Viking {
 }
 ```
 
-And the reader is the following: 
+And the reader is the following : 
 
 ```java
 public static JsonRead<Viking> reader() {
@@ -122,16 +122,16 @@ public static JsonRead<Viking> reader() {
 } 
 ```
 
-To a better understanding, here is the decomposition of the previous code : 
+For a better understanding, here is the decomposition of the previous code : 
 
 
-This read a string at path "firstName"
+This part reads a string at path "firstName"
 ```java
 JsonRead<String> stringJsonRead = _string("firstName");
 ```
 
-There is an alternative, that read a string at a path in order to use this string to do something else.
-Here create a builder and apply the string to the firstName field
+Here is an alternative, that reads a `String` at a path in order to use this `String` for something else.
+Then you'll need to create a builder and apply the string to the `firstName` field :
 ```java
 JsonRead<VikingBuilder> vikingBuilderJsonRead = _string("firstName", str -> Viking.builder().firstName(str));
 ```
@@ -141,32 +141,32 @@ The same with method reference :
 JsonRead<VikingBuilder> vikingBuilderJsonRead2 = _string("firstName", Viking.builder()::firstName);
 ```
 
-Now we can use `and`. 
+Now we can use the method `and`. 
 With `and` you can read another field and combine with the current builder like this :   
 ```java
 JsonRead<VikingBuilder> vikingBuilderJsonReadStep2 = vikingBuilderJsonRead2
     .and(_string("lastName"), (previousBuilder, str) -> previousBuilder.lastName(str));
 ```
 
-Or with method reference : 
+The same with method reference : 
 
 ```java
 JsonRead<VikingBuilder> vikingBuilderJsonReadStep2 = vikingBuilderJsonRead2
     .and(_string("lastName"), VikingBuilder::lastName);
 ```
-At the end when all the field are read, we can use `map` to transform the builder in the Viking instance : 
+At the end, when all the fields have been read, we can use `map` to transform the builder in the `Viking` instance : 
 
 ```java
 JsonRead<Viking> vikingJsonRead = vikingBuilderJsonReadStep2.map(b -> b.build());
 ```
 
-or with method reference, we'll have 
+The same with method reference : 
 
 ```java
 JsonRead<Viking> vikingJsonRead = vikingBuilderJsonReadStep2.map(VikingBuilder::build);
 ```
 
-Wiring all together we'll have 
+Wiring all together we'll have :
 
 ```java
 public static JsonRead<Viking> reader() {
@@ -177,7 +177,7 @@ public static JsonRead<Viking> reader() {
 } 
 ```
 
-There's existing reader for 
+We provide readers for :
 * `String`: `_string(...)`
 * `Integer`: `_int(...)`
 * `Long`: `_long(...)`
@@ -193,8 +193,7 @@ There's existing reader for
 
 ## Json Write
 
-
-A json write is 
+A json write is :
 
 ```java
 @FunctionalInterface
@@ -209,7 +208,7 @@ With a lambda you can define a write as :
 JsonWrite<String> strWrite = str -> new TextNode(str);
 ```
 
-To define a json object or arrays there is helpers so for the viking pojo a write look like : 
+To define a JSON object or arrays there is helpers so for the `Viking` POJO a write look like : 
 
 ```java
 public static JsonWrite<Viking> writer() {
@@ -221,7 +220,7 @@ public static JsonWrite<Viking> writer() {
 }
 ``` 
 
-Like for the readers, writers are already defined for commons types : 
+Just as we do for the readers, we provide writers common types : 
 
 * `String`: `$string()`
 * `Integer`: `$int()`
@@ -244,7 +243,7 @@ JsonFormat<Viking> format() {
 }
 ```
 
-## Parsing json and converting from to POJOs 
+## Parsing json and converting it to POJOs 
 
 At the end with the following definition : 
 
@@ -325,11 +324,11 @@ In the following example, there's also different version of the json object seri
 The parsing is done using two fields `type` and `version`: 
  
  * `type` is the type of the animal: dog or cat 
- * `version` is the version of the json representation  
+ * `version` is the version of it's JSON representation  
     
-Here, we have two versions of the dog json, one with the `name`in the field `legacyName` (the `v1`version) and one with the `name`in the field `name` (the `v2`version).  
+Here, we have two versions of the dog JSON, one with the `name`in the field `legacyName` (the `v1`version) and one with the `name`in the field `name` (the `v2`version).  
 
-The readers are the followings 
+The readers are the followings :
 
 ```java
 JsonRead<Animal> dogJsonReadV1 =
@@ -355,7 +354,7 @@ JsonRead<Animal> oneOfRead = JsonRead.oneOf(_string("type"), _string("version"),
 ));
 ```
 
-Or with the vavr helpers : 
+Or with the `vavr` helpers : 
 ```java
 JsonRead<Animal> oneOfRead = JsonRead.oneOf(_string("type"), _string("version"), "data", List(
         caseOf($Tuple2($("dog"), $("v1")), dogJsonReadV1),
@@ -366,9 +365,9 @@ JsonRead<Animal> oneOfRead = JsonRead.oneOf(_string("type"), _string("version"),
 
 ## Json schema 
 
-The `JsonRead` expose a json schema https://json-schema.org/. This could be usefull when you have to share the schema to other teams. 
+`JsonRead` exposes a JSON schema https://json-schema.org/. This could be usefull when you have to share the schema to other teams. 
 
-In the case you need to override or enrich the schema, there is some helpers to do that.
+In the case you need to override or enrich the schema, there is some helpers to do that :
 
 ```java
 JsonRead.ofRead(oneOfRead, JsonSchema.emptySchema()
