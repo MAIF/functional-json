@@ -34,7 +34,9 @@ public class Json {
         mapper.registerModule(new VavrModule());
         mapper.registerModule(new Jdk8Module());
         mapper.registerModule(new JavaTimeModule());
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_ABSENT);
         return mapper;
     }
