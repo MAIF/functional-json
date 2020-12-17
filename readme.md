@@ -1,7 +1,7 @@
-# Functional json  [![travis-badge][]][travis] [![jar-badge][]][jar]
+# Functional json  [![ga-badge][]][ga] [![jar-badge][]][jar]
 
-[travis]:               https://travis-ci.com/github/MAIF/functional-json
-[travis-badge]:         https://travis-ci.com/MAIF/functional-json.svg?token=Ko1pywmkoph2sM5cQjrw&branch=master
+[ga]:               https://github.com/MAIF/functional-json/actions?query=workflow%3ABuild
+[ga-badge]:         https://github.com/MAIF/functional-json/workflows/Build/badge.svg
 [jar]:                  https://bintray.com/maif-functional-java/maven/functional-json/_latestVersion
 [jar-badge]:            https://api.bintray.com/packages/maif-functional-java/maven/functional-json/images/download.svg
 
