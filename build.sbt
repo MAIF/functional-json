@@ -33,6 +33,7 @@ sonatypePublishToBundle := {
     Some(Resolver.file("sonatype-local-bundle", sonatypeBundleDirectory.value))
   }
 }
+
 sonatypeDefaultResolver := {
   val profileM = sonatypeTargetRepositoryProfile.?.value
   val staged = profileM.map { stagingRepoProfile =>
