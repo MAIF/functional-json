@@ -1,7 +1,6 @@
 import Dependencies._
 import ReleaseTransformations._
 import sbt.librarymanagement.MavenRepository
-import xerial.sbt.sonatype.SonatypeClient.StagingRepositoryProfile
 
 organization := "fr.maif"
 
@@ -10,11 +9,9 @@ name := "functional-json"
 scalaVersion := "2.12.12"
 
 lazy val root = (project in file("."))
-//.settings(publishCommonsSettings: _*)
 
 val res = Seq(
   "jitpack.io" at "https://jitpack.io"
-//  "Sonatype Nexus Repository Manager" at "https://s01.oss.sonatype.org"
 )
 
 /* Début code temporaire lié au changement d'url sonatype */
@@ -128,50 +125,3 @@ inThisBuild(
     publishMavenStyle := true
   )
 )
-//
-//lazy val publishCommonsSettings = Seq(
-//  homepage := Some(url(s"https://github.com/$githubRepo")),
-//  startYear := Some(2020),
-//  crossPaths := false,
-//  scmInfo := Some(
-//    ScmInfo(
-//      url(s"https://github.com/$githubRepo"),
-//      s"scm:git:https://github.com/$githubRepo.git",
-//      Some(s"scm:git:git@github.com:$githubRepo.git")
-//    )
-//  ),
-//  licenses := Seq(
-//    ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
-//  ),
-//  developers := List(
-//    Developer(
-//      "alexandre.delegue",
-//      "Alexandre Delègue",
-//      "",
-//      url(s"https://github.com/larousso")
-//    ),
-//    Developer(
-//      "benjamin.cavy",
-//      "Benjamin Cavy",
-//      "",
-//      url(s"https://github.com/ptitFicus")
-//    ),
-//    Developer(
-//      "gregory.bevan",
-//      "Grégory Bévan",
-//      "",
-//      url(s"https://github.com/GregoryBevan")
-//    ),
-//    Developer(
-//      "georges.ginon",
-//      "Georges Ginon",
-//      "",
-//      url(s"https://github.com/ftoumHub")
-//    )
-//  ),
-//  releaseCrossBuild := true,
-//  publishMavenStyle := true,
-//  publishArtifact in Test := false,
-//  resolvers ++= res,
-//  pomIncludeRepository := { _ => false }
-//)
