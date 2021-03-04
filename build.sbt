@@ -122,6 +122,7 @@ inThisBuild(
         url(s"https://github.com/ftoumHub")
       )
     ),
-    publishMavenStyle := true
+    publishMavenStyle := true,
+    releaseCrossBuild := true
   )
 )
