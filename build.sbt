@@ -1,5 +1,7 @@
 import Dependencies._
 import ReleaseTransformations._
+import sbt.librarymanagement.MavenRepository
+import xerial.sbt.sonatype.SonatypeClient.StagingRepositoryProfile
 
 organization := "fr.maif"
 
@@ -8,21 +10,44 @@ name := "functional-json"
 scalaVersion := "2.12.12"
 
 lazy val root = (project in file("."))
-  .settings(publishCommonsSettings: _*)
+//.settings(publishCommonsSettings: _*)
 
 val res = Seq(
-  "jitpack.io" at "https://jitpack.io",
-  Resolver.jcenterRepo,
-  Resolver.bintrayRepo("maif-functional-java", "maven")
+  "jitpack.io" at "https://jitpack.io"
 //  "Sonatype Nexus Repository Manager" at "https://s01.oss.sonatype.org"
 )
 
-ThisBuild / publishTo := {
-  val nexus = "https://s01.oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
+/* Début code temporaire lié au changement d'url sonatype */
+val sonatypeStaging = MavenRepository(
+  "sonatype-staging",
+  "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+)
+val sonatypeSnapshots = MavenRepository(
+  "sonatype-snapshots",
+  "https://s01.oss.sonatype.org/content/repositories/snapshots"
+)
+
+sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+sonatypeCredentialHost := "s01.oss.sonatype.org"
+sonatypePublishToBundle := {
+  if (version.value.endsWith("-SNAPSHOT")) {
+    Some(sonatypeSnapshots)
+  } else {
+    Some(Resolver.file("sonatype-local-bundle", sonatypeBundleDirectory.value))
+  }
 }
+sonatypeDefaultResolver := {
+  val profileM = sonatypeTargetRepositoryProfile.?.value
+  val staged = profileM.map { stagingRepoProfile =>
+    "releases" at stagingRepoProfile.deployUrl
+  }
+  staged.getOrElse(if (version.value.endsWith("-SNAPSHOT")) {
+    sonatypeSnapshots
+  } else {
+    sonatypeStaging
+  })
+}
+/* Fin code temporaire lié au changement d'url sonatype */
 
 resolvers ++= res
 
@@ -67,49 +92,86 @@ releaseProcess := Seq[ReleaseStep](
 
 lazy val githubRepo = "maif/functional-json"
 
-lazy val publishCommonsSettings = Seq(
-  homepage := Some(url(s"https://github.com/$githubRepo")),
-  startYear := Some(2020),
-  crossPaths := false,
-  scmInfo := Some(
-    ScmInfo(
-      url(s"https://github.com/$githubRepo"),
-      s"scm:git:https://github.com/$githubRepo.git",
-      Some(s"scm:git:git@github.com:$githubRepo.git")
-    )
-  ),
-  licenses := Seq(
-    ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
-  ),
-  developers := List(
-    Developer(
-      "alexandre.delegue",
-      "Alexandre Delègue",
-      "",
-      url(s"https://github.com/larousso")
+inThisBuild(
+  List(
+    organization := "fr.maif",
+    homepage := Some(url(s"https://github.com/$githubRepo")),
+    licenses := List(
+      "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
     ),
-    Developer(
-      "benjamin.cavy",
-      "Benjamin Cavy",
-      "",
-      url(s"https://github.com/ptitFicus")
+    developers := List(
+      Developer(
+        "alexandre.delegue",
+        "Alexandre Delègue",
+        "",
+        url(s"https://github.com/larousso")
+      ),
+      Developer(
+        "benjamin.cavy",
+        "Benjamin Cavy",
+        "",
+        url(s"https://github.com/ptitFicus")
+      ),
+      Developer(
+        "gregory.bevan",
+        "Grégory Bévan",
+        "",
+        url(s"https://github.com/GregoryBevan")
+      ),
+      Developer(
+        "georges.ginon",
+        "Georges Ginon",
+        "",
+        url(s"https://github.com/ftoumHub")
+      )
     ),
-    Developer(
-      "gregory.bevan",
-      "Grégory Bévan",
-      "",
-      url(s"https://github.com/GregoryBevan")
-    ),
-    Developer(
-      "georges.ginon",
-      "Georges Ginon",
-      "",
-      url(s"https://github.com/ftoumHub")
-    )
-  ),
-  releaseCrossBuild := true,
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  resolvers ++= res,
-  pomIncludeRepository := { _ => false }
+    publishMavenStyle := true
+  )
 )
+//
+//lazy val publishCommonsSettings = Seq(
+//  homepage := Some(url(s"https://github.com/$githubRepo")),
+//  startYear := Some(2020),
+//  crossPaths := false,
+//  scmInfo := Some(
+//    ScmInfo(
+//      url(s"https://github.com/$githubRepo"),
+//      s"scm:git:https://github.com/$githubRepo.git",
+//      Some(s"scm:git:git@github.com:$githubRepo.git")
+//    )
+//  ),
+//  licenses := Seq(
+//    ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
+//  ),
+//  developers := List(
+//    Developer(
+//      "alexandre.delegue",
+//      "Alexandre Delègue",
+//      "",
+//      url(s"https://github.com/larousso")
+//    ),
+//    Developer(
+//      "benjamin.cavy",
+//      "Benjamin Cavy",
+//      "",
+//      url(s"https://github.com/ptitFicus")
+//    ),
+//    Developer(
+//      "gregory.bevan",
+//      "Grégory Bévan",
+//      "",
+//      url(s"https://github.com/GregoryBevan")
+//    ),
+//    Developer(
+//      "georges.ginon",
+//      "Georges Ginon",
+//      "",
+//      url(s"https://github.com/ftoumHub")
+//    )
+//  ),
+//  releaseCrossBuild := true,
+//  publishMavenStyle := true,
+//  publishArtifact in Test := false,
+//  resolvers ++= res,
+//  pomIncludeRepository := { _ => false }
+//)
