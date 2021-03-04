@@ -14,7 +14,10 @@ val res = Seq(
   "jitpack.io" at "https://jitpack.io",
   Resolver.jcenterRepo,
   Resolver.bintrayRepo("maif-functional-java", "maven")
+//  "Sonatype Nexus Repository Manager" at "https://s01.oss.sonatype.org"
 )
+
+publishTo := sonatypePublishToBundle.value
 
 resolvers ++= res
 
