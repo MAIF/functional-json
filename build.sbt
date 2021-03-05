@@ -14,6 +14,8 @@ val res = Seq(
   "jitpack.io" at "https://jitpack.io"
 )
 
+usePgpKeyHex("ACB29F776DF78DC275FD53D701A8C4DED9143455")
+
 /* Début code temporaire lié au changement d'url sonatype */
 val sonatypeStaging = MavenRepository(
   "sonatype-staging",
