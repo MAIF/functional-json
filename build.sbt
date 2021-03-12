@@ -92,6 +92,7 @@ inThisBuild(
         url(s"https://github.com/ftoumHub")
       )
     ),
-    releaseCrossBuild := false
+    releaseCrossBuild := false,
+    crossPaths := false
   )
 )
