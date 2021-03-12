@@ -10,46 +10,26 @@ scalaVersion := "2.12.12"
 
 lazy val root = (project in file("."))
 
-val res = Seq(
-  "jitpack.io" at "https://jitpack.io"
-)
-
 usePgpKeyHex("ACB29F776DF78DC275FD53D701A8C4DED9143455")
-
-/* Début code temporaire lié au changement d'url sonatype */
-val sonatypeStaging = MavenRepository(
-  "sonatype-staging",
-  "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
-)
-val sonatypeSnapshots = MavenRepository(
-  "sonatype-snapshots",
-  "https://s01.oss.sonatype.org/content/repositories/snapshots"
-)
-
+//val sonatypeSnapshots = MavenRepository(
+//  "sonatype-snapshots",
+//  "https://s01.oss.sonatype.org/content/repositories/snapshots"
+//)
 sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 sonatypeCredentialHost := "s01.oss.sonatype.org"
-sonatypePublishToBundle := {
-  if (version.value.endsWith("-SNAPSHOT")) {
-    Some(sonatypeSnapshots)
-  } else {
-    Some(Resolver.file("sonatype-local-bundle", sonatypeBundleDirectory.value))
-  }
-}
-
-sonatypeDefaultResolver := {
-  val profileM = sonatypeTargetRepositoryProfile.?.value
-  val staged = profileM.map { stagingRepoProfile =>
-    "releases" at stagingRepoProfile.deployUrl
-  }
-  staged.getOrElse(if (version.value.endsWith("-SNAPSHOT")) {
-    sonatypeSnapshots
-  } else {
-    sonatypeStaging
-  })
-}
+/* Début code temporaire lié au changement d'url sonatype */
+//sonatypePublishToBundle := {
+//  if (version.value.endsWith("-SNAPSHOT")) {
+//    Some(sonatypeSnapshots)
+//  } else {
+//    Some(Resolver.file("sonatype-local-bundle", sonatypeBundleDirectory.value))
+//  }
+//}
 /* Fin code temporaire lié au changement d'url sonatype */
-
-resolvers ++= res
+publishTo := sonatypePublishToBundle.value
+resolvers ++= Seq(
+  "jitpack.io" at "https://jitpack.io"
+)
 
 libraryDependencies ++= Seq(
   "io.vavr" % "vavr" % vavrVersion,
@@ -126,6 +106,6 @@ inThisBuild(
       )
     ),
     publishMavenStyle := true,
-    releaseCrossBuild := true
+    releaseCrossBuild := false
   )
 )
