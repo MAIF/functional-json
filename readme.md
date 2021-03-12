@@ -2,8 +2,8 @@
 
 [ga]:               https://github.com/MAIF/functional-json/actions?query=workflow%3ABuild
 [ga-badge]:         https://github.com/MAIF/functional-json/workflows/Build/badge.svg
-[jar]:                  https://bintray.com/maif-functional-java/maven/functional-json/_latestVersion
-[jar-badge]:            https://api.bintray.com/packages/maif-functional-java/maven/functional-json/images/download.svg
+[jar]:              https://maven-badges.herokuapp.com/maven-central/fr.maif/functional-json
+[jar-badge]:        https://maven-badges.herokuapp.com/maven-central/fr.maif/functional-json/badge.svg
 
 
 This library inspired by [playframeork scala json](https://github.com/playframework/play-json) lib and [json-lib](https://github.com/mathieuancelin/json-lib) provide helpers to manipulate [Jackson](https://github.com/FasterXML/jackson) json nodes. 
