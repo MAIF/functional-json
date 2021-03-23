@@ -6,7 +6,7 @@
 [jar-badge]:        https://maven-badges.herokuapp.com/maven-central/fr.maif/functional-json/badge.svg
 
 
-This library inspired by [playframeork scala json](https://github.com/playframework/play-json) lib and [json-lib](https://github.com/mathieuancelin/json-lib) provide helpers to manipulate [Jackson](https://github.com/FasterXML/jackson) json nodes. 
+This library inspired by [playframework scala json](https://github.com/playframework/play-json) lib and [json-lib](https://github.com/mathieuancelin/json-lib) provide helpers to manipulate [Jackson](https://github.com/FasterXML/jackson) json nodes. 
 With this lib you can have a total control on json serialization and deserialization. 
 You can also separate POJO's definition from its serialization, which can be helpful in an hexagonal architecture. 
 Another benefit is to get various ser/des for the same class. 
@@ -92,13 +92,13 @@ JsonRead<String> strRead = json -> {
 };
 ```
 
-This lib already provides reader for all common types so you probably won't have to write this kind of code. 
+This lib already provides readers for all common types so you probably won't have to write this kind of code. 
 
 If you need to implement a specific reader for a POJO, this will look like this.
 
 The POJO with a builder and immutable fields. 
 
-The `@FieldNameConstants` is a lombock annotation that will create a sub class with static fields with the name of each fields. 
+The `@FieldNameConstants` is a lombok annotation that will create a sub class with static fields with the name of each fields. 
 
 ```java
 @FieldNameConstants
@@ -326,7 +326,7 @@ The parsing is done using two fields `type` and `version`:
  * `type` is the type of the animal: dog or cat 
  * `version` is the version of it's JSON representation  
     
-Here, we have two versions of the dog JSON, one with the `name`in the field `legacyName` (the `v1`version) and one with the `name`in the field `name` (the `v2`version).  
+Here, we have two versions of the dog JSON, one with the `name` in the field `legacyName` (the `v1` version) and one with the `name` in the field `name` (the `v2`version).  
 
 The readers are the followings :
 
