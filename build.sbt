@@ -1,6 +1,5 @@
 import Dependencies._
 import ReleaseTransformations._
-import sbt.librarymanagement.MavenRepository
 
 organization := "fr.maif"
 
@@ -8,7 +7,7 @@ name := "functional-json"
 
 scalaVersion := "2.12.12"
 
-lazy val root = (project in file("."))
+lazy val root = project in file(".")
 
 usePgpKeyHex("ACB29F776DF78DC275FD53D701A8C4DED9143455")
 
@@ -19,14 +18,17 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "io.vavr" % "vavr" % vavrVersion,
-  "io.vavr" % "vavr-jackson" % vavrVersion,
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
-  "org.projectlombok" % "lombok" % "1.18.4",
-  "com.novocode" % "junit-interface" % "0.11" % Test,
-  "org.assertj" % "assertj-core" % "3.10.0" % Test,
-  "com.github.everit-org.json-schema" % "org.everit.json.schema" % "1.12.1" % Test
+  "io.vavr"                           % "vavr"                    % vavrVersion,
+  "io.vavr"                           % "vavr-jackson"            % vavrVersion,
+  "com.fasterxml.jackson.core"        % "jackson-core"            % jacksonVersion,
+  "com.fasterxml.jackson.core"        % "jackson-annotations"     % jacksonVersion,
+  "com.fasterxml.jackson.core"        % "jackson-databind"        % jacksonVersion,
+  "com.fasterxml.jackson.datatype"    % "jackson-datatype-jdk8"   % jacksonVersion,
+  "com.fasterxml.jackson.datatype"    % "jackson-datatype-jsr310" % jacksonVersion,
+  "org.projectlombok"                 % "lombok"                  % "1.18.4",
+  "com.novocode"                      % "junit-interface"         % "0.11"   % Test,
+  "org.assertj"                       % "assertj-core"            % "3.10.0" % Test,
+  "com.github.everit-org.json-schema" % "org.everit.json.schema"  % "1.12.1" % Test
 )
 
 val javaVersion = "8"
@@ -64,34 +66,34 @@ inThisBuild(
     organization := "fr.maif",
     homepage := Some(url(s"https://github.com/$githubRepo")),
     licenses := List(
-      "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
-    ),
+        "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
+      ),
     developers := List(
-      Developer(
-        "alexandre.delegue",
-        "Alexandre Delègue",
-        "",
-        url(s"https://github.com/larousso")
+        Developer(
+          "alexandre.delegue",
+          "Alexandre Delègue",
+          "",
+          url(s"https://github.com/larousso")
+        ),
+        Developer(
+          "benjamin.cavy",
+          "Benjamin Cavy",
+          "",
+          url(s"https://github.com/ptitFicus")
+        ),
+        Developer(
+          "gregory.bevan",
+          "Grégory Bévan",
+          "",
+          url(s"https://github.com/GregoryBevan")
+        ),
+        Developer(
+          "georges.ginon",
+          "Georges Ginon",
+          "",
+          url(s"https://github.com/ftoumHub")
+        )
       ),
-      Developer(
-        "benjamin.cavy",
-        "Benjamin Cavy",
-        "",
-        url(s"https://github.com/ptitFicus")
-      ),
-      Developer(
-        "gregory.bevan",
-        "Grégory Bévan",
-        "",
-        url(s"https://github.com/GregoryBevan")
-      ),
-      Developer(
-        "georges.ginon",
-        "Georges Ginon",
-        "",
-        url(s"https://github.com/ftoumHub")
-      )
-    ),
     releaseCrossBuild := false,
     crossPaths := false
   )

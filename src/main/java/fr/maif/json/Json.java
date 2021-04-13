@@ -420,7 +420,7 @@ public class Json {
      * @return the field name / value pair
      */
     public static <T> JsPair $(String field, Option<T> value, JsonWrite<T> jsonWrite) {
-        return new JsPair(field, value.map(jsonWrite::write));
+        return new JsPair(field, Objects.isNull(value) ? Option.none() : value.map(jsonWrite::write));
     }
     /**
      * An object field for any optional value using a writer
