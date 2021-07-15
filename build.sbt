@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core"        % "jackson-databind"        % jacksonVersion,
   "com.fasterxml.jackson.datatype"    % "jackson-datatype-jdk8"   % jacksonVersion,
   "com.fasterxml.jackson.datatype"    % "jackson-datatype-jsr310" % jacksonVersion,
-  "org.projectlombok"                 % "lombok"                  % "1.18.4",
+  "org.projectlombok"                 % "lombok"                  % "1.18.4" % Provided,
   "com.novocode"                      % "junit-interface"         % "0.11"   % Test,
   "org.assertj"                       % "assertj-core"            % "3.10.0" % Test,
   "com.github.everit-org.json-schema" % "org.everit.json.schema"  % "1.12.1" % Test
