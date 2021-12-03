@@ -1,11 +1,7 @@
 package fr.maif.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import com.fasterxml.jackson.databind.node.*;
 import io.vavr.collection.Traversable;
 
 import java.math.BigDecimal;
@@ -98,6 +94,28 @@ public interface JsonWrite<T> {
     }
 
     /**
+     * Write long to json
+     * @return
+     */
+    static JsonWrite<Long> $long() {
+        return LongNode::new;
+    }
+        /**
+     * Write double to json
+     * @return
+     */
+    static JsonWrite<Double> $double() {
+        return DoubleNode::new;
+    }
+        /**
+     * Write float to json
+     * @return
+     */
+    static JsonWrite<Float> $float() {
+        return FloatNode::new;
+    }
+
+    /**
      * Write big decimal to json
      *
      * @return the writer
@@ -139,7 +157,7 @@ public interface JsonWrite<T> {
      * @param write the writer
      * @return the writer
      */
-    static <T> JsonWrite<Traversable<T>> $list(JsonWrite<T> write) {
+    static <T> JsonWrite<? extends Traversable<T>> $list(JsonWrite<T> write) {
         return list -> {
             if (list == null) {
                 return Json.newArray();

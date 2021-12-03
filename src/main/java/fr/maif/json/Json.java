@@ -431,24 +431,6 @@ public class Json {
     public static <T> JsPair $$(String field, Option<T> value, JsonWrite<T> jsonWrite) {
         return Json.$(field, value, jsonWrite);
     }
-    /**
-     * An object field for any collection value using a writer
-     * @param field the name
-     * @param value the value
-     * @return the field name / value pair
-     */
-    public static <T> JsPair $(String field, Traversable<T> value, JsonWrite<T> jsonWrite) {
-        return new JsPair(field, Option.of(value).map(v -> arr(v.map(jsonWrite::write).toJavaArray(JsonNode[]::new))));
-    }
-    /**
-     * An object field for any collection value using a writer
-     * @param field the name
-     * @param value the value
-     * @return the field name / value pair
-     */
-    public static <T> JsPair $$(String field, Traversable<T> value, JsonWrite<T> jsonWrite) {
-        return Json.$(field, value, jsonWrite);
-    }
 
     public static class JsPair {
         final String field;

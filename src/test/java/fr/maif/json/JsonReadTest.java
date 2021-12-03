@@ -405,6 +405,16 @@ public class JsonReadTest {
     }
 
     @Test
+    public void readOrElseDefault() {
+        JsonRead<String> stringJsonRead = _string("path").orDefault("Default");
+        JsResult<String> jsResult = stringJsonRead.read(Json.obj($("path", Json.arr("1", "2", "3"))));
+        assertThat(jsResult).isEqualTo(JsResult.success("Default"));
+        assertThat(stringJsonRead.jsonSchema()).isEqualTo(
+            JsonSchema.objectSchema("path", JsonSchema.stringSchema())
+        );
+    }
+
+    @Test
     public void nullableRead() {
         JsonRead<String> stringJsonRead = _nullable("test", _string());
         String s = stringJsonRead.read(Json.obj()).get();
