@@ -23,10 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 
 import static io.vavr.API.Match;
 import static io.vavr.API.None;
@@ -155,6 +152,31 @@ public interface JsonRead<T> {
     }
 
     /**
+     * If this read doesn't succeed, switch to a fallback read.
+     * @param value to use as default.
+     * @return the reader
+     */
+    default JsonRead<T> orDefault(T value) {
+        return orDefault(() -> value);
+    }
+
+    /**
+     * If this read doesn't succeed, switch to a fallback read.
+     * @param value to use as default.
+     * @return the reader
+     */
+    default JsonRead<T> orDefault(Supplier<T> value) {
+        return JsonRead.ofRead(jsonNode -> {
+            JsResult<T> jsResult = read(jsonNode);
+            if (jsResult.isError()) {
+                return value(value).read(jsonNode);
+            } else {
+                return jsResult;
+            }
+        }, this.jsonSchema().computeSchema());
+    }
+
+    /**
      * Convert the json schema of this read
      * @param func the function to apply to schema
      * @return the updated reader
@@ -244,6 +266,28 @@ public interface JsonRead<T> {
                         JsResult::success
                 )
         , JsonSchema.emptySchema());
+    }
+
+    /**
+     * Reader from constant value
+     *
+     * @param value
+     * @param <T>
+     * @return
+     */
+    static <T> JsonRead<T> value(T value) {
+        return json -> JsResult.success(value);
+    }
+
+    /**
+     * Reader from constant value
+     *
+     * @param value
+     * @param <T>
+     * @return
+     */
+    static <T> JsonRead<T> value(Supplier<T> value) {
+        return json -> JsResult.success(value.get());
     }
 
     /**
@@ -1184,6 +1228,103 @@ public interface JsonRead<T> {
      */
     static <R> JsonRead<R> _int(String path, Function<Integer, R> func) {
         return _int(path).map(func);
+    }
+
+    /**
+     * Read an float value
+     *
+     * <pre>{@code
+     * JsonRead<Float> reader = _float();
+     * }</pre>
+     *
+     * @return the reader
+     */
+    static JsonRead<Float> _float() {
+        return JsonRead.of(json -> {
+            if (!Objects.isNull(json) && json.isNumber()) {
+                return JsResult.success(json.numberValue().floatValue());
+            } else {
+                return JsResult.error(JsResult.Error.error("number.expected"));
+            }
+        }, JsonSchema.numberSchema());
+    }
+
+    /**
+     * Read an float value
+     *
+     * <pre>{@code
+     * JsonRead<Float> reader = _float("path");
+     * }</pre>
+     *
+     * @param path the field in json object
+     * @return the reader
+     */
+    static JsonRead<Float> _float(String path) {
+        return __(path, _float());
+    }
+
+    /**
+     * Read an float value and transform value
+     *
+     * <pre>{@code
+     * JsonRead<List<Float>> reader = _float("path", value -> List.range(0, value));
+     * }</pre>
+     *
+     * @param path the field in json object
+     * @param func the convert function
+     * @param <R>
+     * @return the reader
+     */
+    static <R> JsonRead<R> _float(String path, Function<Float, R> func) {
+        return _float(path).map(func);
+    }
+    /**
+     * Read a double value
+     *
+     * <pre>{@code
+     * JsonRead<Double> reader = _double();
+     * }</pre>
+     *
+     * @return the reader
+     */
+    static JsonRead<Double> _double() {
+        return JsonRead.of(json -> {
+            if (!Objects.isNull(json) && json.isNumber()) {
+                return JsResult.success(json.numberValue().doubleValue());
+            } else {
+                return JsResult.error(JsResult.Error.error("number.expected"));
+            }
+        }, JsonSchema.numberSchema());
+    }
+
+    /**
+     * Read an double value
+     *
+     * <pre>{@code
+     * JsonRead<Double> reader = _double("path");
+     * }</pre>
+     *
+     * @param path the field in json object
+     * @return the reader
+     */
+    static JsonRead<Double> _double(String path) {
+        return __(path, _double());
+    }
+
+    /**
+     * Read a double value and transform value
+     *
+     * <pre>{@code
+     * JsonRead<List<Double>> reader = _double("path", value -> List.range(0, value));
+     * }</pre>
+     *
+     * @param path the field in json object
+     * @param func the convert function
+     * @param <R>
+     * @return the reader
+     */
+    static <R> JsonRead<R> _double(String path, Function<Double, R> func) {
+        return _double(path).map(func);
     }
 
     /**
