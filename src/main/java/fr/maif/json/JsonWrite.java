@@ -157,7 +157,7 @@ public interface JsonWrite<T> {
      * @param write the writer
      * @return the writer
      */
-    static <T> JsonWrite<? extends Traversable<T>> $list(JsonWrite<T> write) {
+    static <T, Trav extends Traversable<T>> JsonWrite<Trav> $list(JsonWrite<T> write) {
         return list -> {
             if (list == null) {
                 return Json.newArray();
