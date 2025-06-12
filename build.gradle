@@ -112,4 +112,5 @@ nexusPublishing {
 release {
     tagTemplate = 'v${version}'
 }
+
 release.git.requireBranch.set('master')
