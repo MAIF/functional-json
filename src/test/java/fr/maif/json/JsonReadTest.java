@@ -12,7 +12,7 @@ import lombok.*;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -91,7 +91,7 @@ public class JsonReadTest {
             $$("exemples", Json.arr(json))
     );
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void stringValid() {
         JsResult<String> test = _string().read(new TextNode("test"));
         assertThat(test).isEqualTo(JsResult.success("test"));

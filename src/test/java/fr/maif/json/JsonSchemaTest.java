@@ -2,7 +2,7 @@ package fr.maif.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.collection.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static fr.maif.json.Json.$$;
 import static fr.maif.json.JsonSchema.*;
