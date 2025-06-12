@@ -61,10 +61,10 @@ publishing {
         mavenJava(MavenPublication) {
             from(components.java)
             pom {
-                name = "Jooq Async"
-                description = "Reactive vertx integration with jooq"
+                name = "Functional Json"
+                description = "Functional json parsing"
                 inceptionYear = "2020"
-                url = "https://github.com/maif/jooq-async"
+                url = "https://github.com/maif/functional-json"
                 licenses {
                     license {
                         name = "The Apache License, Version 2.0"
@@ -85,9 +85,9 @@ publishing {
                     }
                 }
                 scm {
-                    url = "https://github.com/maif/jooq-async"
-                    connection = "scm:git:git://github.com/maif/jooq-async.git"
-                    developerConnection = "scm:git:ssh://github.com/maif/jooq-async.git"
+                    url = "https://github.com/maif/functional-json"
+                    connection = "scm:git:git://github.com/maif/functional-json.git"
+                    developerConnection = "scm:git:ssh://github.com/maif/functional-json.git"
                 }
             }
         }
