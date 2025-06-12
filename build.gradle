@@ -12,6 +12,7 @@ ext {
     vavrVersion = "0.10.6"
     jacksonVersion = "2.18.4"
     lombokVersion = "1.18.38"
+    jupiterVersion = "5.13.1"
 }
 repositories {
     mavenCentral()
@@ -40,20 +41,19 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
-    testImplementation(platform('org.junit:junit-bom:5.13.1'))
-    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation(platform("org.junit:junit-bom:$jupiterVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
     testImplementation "org.assertj:assertj-core:3.27.3"
     testImplementation "com.github.erosb:everit-json-schema:1.14.6"
 }
 
-test {
-    testLogging {
-        events "PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR"
-    }
-}
-
-tasks.named('test') {
+tasks.named('test', Test) {
     useJUnitPlatform()
+    testLogging {
+        events "passed"
+    }
 }
 
 publishing {
