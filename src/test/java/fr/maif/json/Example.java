@@ -5,7 +5,7 @@ import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.experimental.FieldNameConstants;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static fr.maif.json.Json.$;
 import static fr.maif.json.JsonRead._opt;

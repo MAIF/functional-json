@@ -1,18 +1,23 @@
 name: Publish
 on:
   push:
-    branches: [master, main]
-    tags: ["*"]
+    branches: [main, master]
 jobs:
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 0
-      - uses: olafurpg/setup-scala@v10
-      - uses: olafurpg/setup-gpg@v3
-      - run: sbt ci-release
+      - name: Decode GPG Key
+        run: |
+          mkdir -p ~/.gradle/
+          echo "${{secrets.PGP_SECRET}}" | base64 --decode > ~/.gradle/secring.key
+          gpg --batch --pinentry-mode=loopback --yes --passphrase ${{ secrets.PGP_PASSPHRASE }} --import ~/.gradle/secring.key
+          gpg --batch --pinentry-mode=loopback --yes --passphrase ${{ secrets.PGP_PASSPHRASE }} --export-secret-key 01BA0C89CEC406826F7680A162D9B4F3D67419B7 > ~/.gradle/secring.gpg
+      - name: Publish
+        run: |
+          ./gradlew publishToSonatype -Psigning.keyId=D67419B7 -Psigning.password=${{secrets.PGP_PASSPHRASE}} -Psigning.secretKeyRingFile=$(echo ~/.gradle/secring.gpg) closeAndReleaseSonatypeStagingRepository --warn --stacktrace
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}

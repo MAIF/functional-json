@@ -1,0 +1,105 @@
+plugins {
+    id 'net.researchgate.release' version '3.0.0'
+    id 'java'
+    id  'maven-publish'
+    id 'signing'
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+}
+
+group = 'fr.maif'
+
+ext {
+    vavrVersion = "0.10.6"
+    jacksonVersion = "2.18.4"
+    lombokVersion = "1.18.38"
+}
+repositories {
+    mavenCentral()
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencies {
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    implementation "io.vavr:vavr:$vavrVersion"
+    implementation "io.vavr:vavr-jackson:0.10.3"
+    implementation "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
+
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    testImplementation(platform('org.junit:junit-bom:5.13.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation "org.assertj:assertj-core:3.27.3"
+    testImplementation "com.github.erosb:everit-json-schema:1.14.6"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+            pom {
+                name = "Jooq Async"
+                description = "Reactive vertx integration with jooq"
+                inceptionYear = "2020"
+                url = "https://github.com/maif/jooq-async"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'alexandre.delegue'
+                        name = 'Alexandre Delègue'
+                        url = 'https://github.com/larousso'
+                    }
+                    developer {
+                        id = 'benjamin.cavy'
+                        name = 'Benjamin Cavy'
+                        url = 'https://github.com/ptitFicus'
+                    }
+                }
+                scm {
+                    url = "https://github.com/maif/jooq-async"
+                    connection = "scm:git:git://github.com/maif/jooq-async.git"
+                    developerConnection = "scm:git:ssh://github.com/maif/jooq-async.git"
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            username = System.env.SONATYPE_USERNAME
+            password = System.env.SONATYPE_PASSWORD
+        }
+    }
+}
+
+release {
+    tagTemplate = 'v${version}'
+}
+release.git.requireBranch.set('master')
