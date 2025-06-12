@@ -46,6 +46,16 @@ dependencies {
     testImplementation "com.github.erosb:everit-json-schema:1.14.6"
 }
 
+test {
+    testLogging {
+        events "PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
