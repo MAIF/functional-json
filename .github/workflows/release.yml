@@ -23,8 +23,8 @@ jobs:
           distribution: oracle
       - name: release gradle
         run: |
-          git config --local user.email "jooq-async-github-actions@users.noreply.github.com"
-          git config --local user.name "jooq-async-github-actions"
+          git config --local user.email "functional-json-github-actions@users.noreply.github.com"
+          git config --local user.name "jfunctional-json-github-actions"
           ./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ github.event.inputs.releaseVersion }} -Prelease.newVersion=${{ github.event.inputs.nextVersion }}
       - name: push tag
         uses: ad-m/github-push-action@master
