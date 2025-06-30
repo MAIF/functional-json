@@ -2,6 +2,13 @@ name: Publish
 on:
   push:
     branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version to publish, e.g. "1.2.3-543-SNAPSHOT"'
+        required: true
 jobs:
   publish:
     runs-on: ubuntu-latest
