@@ -1397,13 +1397,7 @@ public interface JsonRead<T> {
     }
 
     /**
-     * Read a datetime at path with iso format
-     *
-     * <pre>{@code
-     * JsonRead<LocalDate> reader = _isoLocalDate();
-     * }</pre>
-     *
-     * @return the reader
+     * @return Parses a datetime into an Instant
      */
     static JsonRead<Instant> _instant() {
         return JsonRead.ofRead(_string().flatMapResult(str ->
