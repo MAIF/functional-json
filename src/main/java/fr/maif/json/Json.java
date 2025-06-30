@@ -196,9 +196,7 @@ public class Json {
     }
 
     public static ObjectNode obj(ObjectNode obj, JsPair ...pairs) {
-        List.of(pairs).filter(p -> p.value.isDefined()).forEach(p -> {
-            obj.set(p.field, p.value.get());
-        });
+        List.of(pairs).filter(p -> p.value.isDefined()).forEach(p -> obj.set(p.field, p.value.get()));
         return obj;
     }
 

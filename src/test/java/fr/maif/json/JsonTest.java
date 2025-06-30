@@ -28,7 +28,7 @@ public class JsonTest {
         ObjectMapper mapper = new ObjectMapper();
         String json = "[{\"name\": \"lodbrok\"}, {\"name\": \"haraldson\"}]";
 
-        TypeReference<List<Viking>> typeReference = new TypeReference<List<Viking>>() {
+        TypeReference<List<Viking>> typeReference = new TypeReference<>() {
         };
 
         List<String> names = Json.fromJson(mapper.readTree(json), typeReference).get().stream().map(v -> v.name).collect(Collectors.toList());

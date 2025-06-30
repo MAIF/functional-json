@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.vavr.collection.List;
-import io.vavr.collection.Traversable;
-import io.vavr.control.Option;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,7 +22,7 @@ public interface JsonFormat<T> extends JsonRead<T>, JsonWrite<T> {
     JsonWrite<T> jsonWrite();
 
     static <T> JsonFormat<T> of(JsonRead<T> read, JsonWrite<T> write) {
-        return new JsonFormat<T>() {
+        return new JsonFormat<>() {
             @Override
             public JsonRead<T> jsonRead() {
                 return read;

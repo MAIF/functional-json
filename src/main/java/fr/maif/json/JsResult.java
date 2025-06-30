@@ -12,12 +12,14 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import static java.util.function.Function.identity;
 
 /**
  * A JsResult is a sum type that represents a json parsing result.
  * It could be a JsSuccess or a JsError.
+ *
  * @param <T>
  */
 public interface JsResult<T> {
@@ -29,6 +31,7 @@ public interface JsResult<T> {
     static <R> API.Match.Pattern1<JsResult.JsError<R>, Seq<Error>> $JsError(API.Match.Pattern<Seq<Error>, ?> p1) {
         return API.Match.Pattern1.of(JsResult.JsError.class, p1, s -> Tuple.of(s.errors));
     }
+
     /**
      * Create a JsResult in success from value
      *
@@ -76,6 +79,7 @@ public interface JsResult<T> {
 
     /**
      * Convert the value in case of success
+     *
      * @param func the function to apply in case of success
      * @param <A>
      * @return the JsResult with function applied
@@ -84,13 +88,15 @@ public interface JsResult<T> {
 
     /**
      * Convert the error in case of error
+     *
      * @param func the function to apply in case of success
      * @return the JsResult with function applied on the error side
      */
-    JsResult<T> mapError(Function<Seq<Error>, Seq<Error>> func);
+    JsResult<T> mapError(UnaryOperator<Seq<Error>> func);
 
     /**
      * Compose two JsResult. The func is not applied in case of error.
+     *
      * @param func the function to apply in case of error
      * @param <A>
      * @return the JsResult
@@ -100,10 +106,11 @@ public interface JsResult<T> {
     /**
      * @return the errors, empty list in case of success.
      */
-    Seq<Error> getErrors();
+    Seq<Error> errors();
 
     /**
      * Convert the JsResult to a vavr Either.
+     *
      * @return the either
      */
     Either<Seq<Error>, T> toEither();
@@ -111,7 +118,7 @@ public interface JsResult<T> {
     /**
      * Folds either the error or the success side of this disjunction.
      *
-     * @param onError maps the error value if this is a JsError
+     * @param onError   maps the error value if this is a JsError
      * @param onSuccess maps the success value if this is a JsSuccess
      * @param <R>
      * @return the value
@@ -163,7 +170,7 @@ public interface JsResult<T> {
     }
 
 
-    class JsSuccess<T> implements JsResult <T> {
+    class JsSuccess<T> implements JsResult<T> {
         private final T value;
 
         public JsSuccess(T value) {
@@ -186,7 +193,7 @@ public interface JsResult<T> {
         }
 
         @Override
-        public JsResult<T> mapError(Function<Seq<Error>, Seq<Error>> func) {
+        public JsResult<T> mapError(UnaryOperator<Seq<Error>> func) {
             return this;
         }
 
@@ -196,7 +203,7 @@ public interface JsResult<T> {
         }
 
         @Override
-        public Seq<Error> getErrors() {
+        public Seq<Error> errors() {
             return List.empty();
         }
 
@@ -226,13 +233,7 @@ public interface JsResult<T> {
         }
     }
 
-    class JsError<T> implements JsResult <T> {
-
-        private final Seq<Error> errors;
-
-        public JsError(Seq<Error> errors) {
-            this.errors = errors;
-        }
+    record JsError<T>(Seq<Error> errors) implements JsResult<T> {
 
         @Override
         public Boolean isError() {
@@ -250,7 +251,7 @@ public interface JsResult<T> {
         }
 
         @Override
-        public JsResult<T> mapError(Function<Seq<Error>, Seq<Error>> func) {
+        public JsResult<T> mapError(UnaryOperator<Seq<Error>> func) {
             return new JsError<>(func.apply(errors));
         }
 
@@ -260,26 +261,8 @@ public interface JsResult<T> {
         }
 
         @Override
-        public Seq<Error> getErrors() {
-            return errors;
-        }
-
-        @Override
         public T get() {
-            throw new IllegalStateException("JsError, no value present: "+errors);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            JsError<?> jsError = (JsError<?>) o;
-            return Objects.equals(errors, jsError.errors);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(errors);
+            throw new IllegalStateException("JsError, no value present: " + errors);
         }
 
         @Override
@@ -291,17 +274,7 @@ public interface JsResult<T> {
     }
 
 
-    class Error {
-
-        public final Option<String> path;
-        public final String[] args;
-        public final String message;
-
-        public Error(Option<String> path, String message, String[] args) {
-            this.path = path;
-            this.args = args;
-            this.message = message;
-        }
+    record Error(Option<String> path, String message, String[] args) {
 
         public static Error error(String path, String message, Object... args) {
             return new Error(Option.of(path), message, List.of(args).map(Object::toString).toJavaArray(String[]::new));
@@ -312,7 +285,7 @@ public interface JsResult<T> {
         }
 
         public Error repath(String path) {
-            return new Error(this.path.map(p -> path+"."+p).orElse(Option.of(path)), message, args);
+            return new Error(this.path.map(p -> path + "." + p).orElse(Option.of(path)), message, args);
         }
 
         @Override
@@ -329,9 +302,7 @@ public interface JsResult<T> {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Error error = (Error) o;
-            return Objects.equals(path, error.path) &&
-                    Arrays.equals(args, error.args) &&
-                    Objects.equals(message, error.message);
+            return Objects.equals(path, error.path) && Arrays.equals(args, error.args) && Objects.equals(message, error.message);
         }
 
         @Override
