@@ -8,6 +8,7 @@ import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -95,6 +96,11 @@ public class JsonWriteTest {
         assertThat(write).isEqualTo(Json.newArray());
     }
 
+    @Test
+    public void writeInstant() {
+        JsonNode write = $instant().write(Instant.ofEpochMilli(3600123));
+        assertThat(write).isEqualTo(new TextNode("1970-01-01T01:00:00.123Z"));
+    }
 
     public enum TestEnum {
         test1

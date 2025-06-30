@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -193,6 +194,21 @@ public class JsonReadTest {
         JsResult<LocalDateTime> test = localDateJsonRead.read(new TextNode(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)));
         assertThat(test).isEqualTo(JsResult.success(date));
         assertThat(localDateJsonRead.jsonSchema()).isEqualTo(JsonSchema.dateTimeSchema());
+    }
+
+    @Test
+    public void instantValid() {
+        JsonRead<Instant> read = _instant();
+        var instant = Instant.ofEpochSecond(345544L);
+        JsResult<Instant> test = read.read(new TextNode(DateTimeFormatter.ISO_INSTANT.format(instant)));
+        assertThat(test).isEqualTo(JsResult.success(instant));
+        assertThat(read.jsonSchema()).isEqualTo(JsonSchema.dateTimeSchema());
+    }
+
+    @Test
+    public void instantInvalid() {
+        JsResult<Instant> test = _instant().read(new TextNode("c'est pas un boa ca ?"));
+        assertThat(test).isEqualTo(JsResult.error(JsResult.Error.error("cannot.parse.into.instant")));
     }
 
     @Test

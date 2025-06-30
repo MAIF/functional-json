@@ -19,6 +19,7 @@ import io.vavr.control.Try;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -1393,6 +1394,23 @@ public interface JsonRead<T> {
      */
     static JsonRead<LocalDate> _isoLocalDate() {
             return _localDate(DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    /**
+     * Read a datetime at path with iso format
+     *
+     * <pre>{@code
+     * JsonRead<LocalDate> reader = _isoLocalDate();
+     * }</pre>
+     *
+     * @return the reader
+     */
+    static JsonRead<Instant> _instant() {
+        return JsonRead.ofRead(_string().flatMapResult(str ->
+                Try.of(() -> Instant.parse(str))
+                        .map(JsResult::success)
+                        .getOrElseGet(e -> JsResult.error(JsResult.Error.error("cannot.parse.into.instant")))
+        ), JsonSchema.dateTimeSchema());
     }
 
     /**
