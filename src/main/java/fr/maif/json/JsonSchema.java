@@ -45,7 +45,7 @@ public interface JsonSchema {
     }
 
     static <E extends Enum<E>> EnumSchema<E> enumSchema(Class<E> clazz) {
-        return new EnumSchema<E>(clazz);
+        return new EnumSchema<>(clazz);
     }
 
     static EnumSchemaFromStrings enumSchema(List<String> values) {

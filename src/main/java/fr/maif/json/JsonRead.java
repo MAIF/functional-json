@@ -73,7 +73,7 @@ public interface JsonRead<T> {
      * @return
      */
     static <T> JsonRead<T> of (Function<JsonNode, JsResult<T>> read, JsonSchema jsonSchema) {
-        return new JsonRead<T>() {
+        return new JsonRead<>() {
             @Override
             public JsResult<T> read(JsonNode jsonNode) {
                 return read.apply(jsonNode);
@@ -94,7 +94,7 @@ public interface JsonRead<T> {
      * @return
      */
     static <T> JsonRead<T> ofRead(JsonRead<T> read, JsonSchema jsonSchema) {
-        return new JsonRead<T>() {
+        return new JsonRead<>() {
             @Override
             public JsResult<T> read(JsonNode jsonNode) {
                 return read.read(jsonNode);
@@ -127,11 +127,11 @@ public interface JsonRead<T> {
             if (thisRead.isSuccess() && otherRead.isSuccess()) {
                 return JsResult.success(func.apply(thisRead.get(), otherRead.get()));
             } else if (thisRead.isError() && otherRead.isError()) {
-                return JsResult.error(thisRead.getErrors().appendAll(otherRead.getErrors()));
+                return JsResult.error(thisRead.errors().appendAll(otherRead.errors()));
             } else if (thisRead.isError() && otherRead.isSuccess()) {
-                return JsResult.error(thisRead.getErrors());
+                return JsResult.error(thisRead.errors());
             } else {
-                return JsResult.error(otherRead.getErrors());
+                return JsResult.error(otherRead.errors());
             }
         }, this.jsonSchema().and(other.jsonSchema()));
     }
@@ -949,7 +949,7 @@ public interface JsonRead<T> {
      * @return
      */
     static <A,T> ReadCase<A, T> caseOf(Predicate<A> match, JsonRead<T> read) {
-        return new ReadCase1<A, T>(match, read);
+        return new ReadCase1<>(match, read);
     }
 
     /**
@@ -961,7 +961,7 @@ public interface JsonRead<T> {
      * @return
      */
     static <A,T> ReadCase<A, T> caseOf(Match.Pattern0<? super A> match, JsonRead<T> read) {
-        return new ReadCase1<A, T>(match::isDefinedAt, read);
+        return new ReadCase1<>(match::isDefinedAt, read);
     }
 
     /**
@@ -973,7 +973,7 @@ public interface JsonRead<T> {
      * @return
      */
     static <A, A1, T> ReadCase<A, T> caseOf(Match.Pattern1<A, A1> match, JsonRead<T> read) {
-        return new ReadCase1<A, T>(match::isDefinedAt, read);
+        return new ReadCase1<>(match::isDefinedAt, read);
     }
 
     /**
@@ -986,7 +986,7 @@ public interface JsonRead<T> {
      * @return
      */
     static <A,B,T> ReadCase<Tuple2<A, B>, T> caseOf(BiPredicate<A, B> match, JsonRead<T> read) {
-        return new ReadCase2<A, B, T>(match, read);
+        return new ReadCase2<>(match, read);
     }
 
     /**
@@ -999,7 +999,7 @@ public interface JsonRead<T> {
      * @return
      */
     static <A, A1, A2, B,T> ReadCase<Tuple2<A, B>, T> caseOf(API.Match.Pattern2<Tuple2<A, B>, A1, A2> match, JsonRead<T> read) {
-        return new ReadCase2<A, B, T>((a, b) -> match.isDefinedAt(Tuple(a, b)), read);
+        return new ReadCase2<>((a, b) -> match.isDefinedAt(Tuple(a, b)), read);
     }
 
     interface ReadCase<A, T> {

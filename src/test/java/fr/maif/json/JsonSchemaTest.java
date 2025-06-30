@@ -19,7 +19,7 @@ public class JsonSchemaTest {
     }
 
     private enum TestEnum {
-        value1, value2;
+        value1, value2
     }
 
     @Test

@@ -607,7 +607,7 @@ public class JsonReadTest {
     }
 
     enum AnimalType {
-        dog, cat;
+        dog, cat
     }
 
     @Test
@@ -771,7 +771,8 @@ public class JsonReadTest {
 
     @Test
     public void readFromTypeReference() {
-        JsonRead<List<Pojo>> pojoJsonRead = _fromClass(new TypeReference<List<Pojo>>() {});
+        JsonRead<List<Pojo>> pojoJsonRead = _fromClass(new TypeReference<>() {
+        });
         JsResult<List<Pojo>> read = pojoJsonRead.read(Json.arr(json));
         assertThat(pojoJsonRead.jsonSchema()).isEqualTo(JsonSchema.emptySchema());
         assertThat(read).isEqualTo(JsResult.success(List(
