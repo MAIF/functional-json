@@ -6,6 +6,7 @@ import io.vavr.collection.Traversable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -55,6 +56,24 @@ public interface JsonWrite<T> {
      */
     static JsonWrite<LocalDate> $localdate() {
         return $localdate(DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+
+    /**
+     * Write a date to json in ISO
+     *
+     * @return the writer
+     */
+    static JsonWrite<Instant> $instant(DateTimeFormatter formatter) {
+        return instant -> new TextNode(formatter.format(instant));
+    }
+
+    /**
+     * Write an instant as  ISO-8601 instant format
+     * @return the writer
+     */
+    static JsonWrite<Instant> $instant() {
+        return $instant(DateTimeFormatter.ISO_INSTANT);
     }
 
     /**
