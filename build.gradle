@@ -9,7 +9,7 @@ plugins {
 group = 'fr.maif'
 
 ext {
-    vavrVersion = "0.10.6"
+    vavrVersion = "0.10.7"
     jacksonVersion = "2.18.4"
     lombokVersion = "1.18.38"
     jupiterVersion = "5.13.3"
