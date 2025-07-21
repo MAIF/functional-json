@@ -10,7 +10,7 @@ group = 'fr.maif'
 
 ext {
     vavrVersion = "0.10.6"
-    jacksonVersion = "2.18.4"
+    jacksonVersion = "2.19.2"
     lombokVersion = "1.18.38"
     jupiterVersion = "5.13.3"
 }
