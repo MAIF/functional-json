@@ -1,7 +1,7 @@
 package fr.maif.json;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.*;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.*;
 import io.vavr.collection.Traversable;
 
 import java.math.BigDecimal;
@@ -35,7 +35,7 @@ public interface JsonWrite<T> {
      * @return the writer
      */
     static JsonWrite<LocalDate> $localdate(DateTimeFormatter formatter) {
-        return localdate -> new TextNode(formatter.format(localdate));
+        return localdate -> new StringNode(formatter.format(localdate));
     }
 
 
@@ -46,7 +46,7 @@ public interface JsonWrite<T> {
      * @return the writer
      */
     static JsonWrite<LocalDateTime> $localdatetime(DateTimeFormatter formatter) {
-        return localdate -> new TextNode(formatter.format(localdate));
+        return localdate -> new StringNode(formatter.format(localdate));
     }
 
     /**
@@ -65,7 +65,7 @@ public interface JsonWrite<T> {
      * @return the writer
      */
     static JsonWrite<Instant> $instant(DateTimeFormatter formatter) {
-        return instant -> new TextNode(formatter.format(instant));
+        return instant -> new StringNode(formatter.format(instant));
     }
 
     /**
@@ -91,7 +91,7 @@ public interface JsonWrite<T> {
      * @return the writer
      */
     static JsonWrite<String> $string() {
-        return TextNode::new;
+        return StringNode::new;
     }
 
     /**
@@ -140,7 +140,7 @@ public interface JsonWrite<T> {
      * @return the writer
      */
     static JsonWrite<BigDecimal> $bigdecimal() {
-        return value -> new TextNode(value.setScale(2, RoundingMode.HALF_UP).toString());
+        return value -> new StringNode(value.setScale(2, RoundingMode.HALF_UP).toString());
     }
 
     /**
@@ -167,7 +167,7 @@ public interface JsonWrite<T> {
      * @return the writer
      */
     static <T extends Enum<T>> JsonWrite<T> $enum() {
-        return en -> new TextNode(en.name());
+        return en -> new StringNode(en.name());
     }
 
     /**

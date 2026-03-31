@@ -1,18 +1,18 @@
 plugins {
-    id 'net.researchgate.release' version '3.0.0'
+    id 'net.researchgate.release' version '3.1.0'
     id 'java'
     id  'maven-publish'
     id 'signing'
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 group = 'fr.maif'
 
 ext {
-    vavrVersion = "0.10.6"
-    jacksonVersion = "2.18.4"
-    lombokVersion = "1.18.38"
-    jupiterVersion = "5.13.3"
+    vavrVersion = "1.0.1"
+    jacksonVersion = "3.1.1"
+    lombokVersion = "1.18.44"
+    jupiterVersion = "5.13.1"
 }
 repositories {
     mavenCentral()
@@ -31,12 +31,10 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
     implementation "io.vavr:vavr:$vavrVersion"
-    implementation "io.vavr:vavr-jackson:0.10.3"
-    implementation "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
-    implementation "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
-    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
+    implementation "io.vavr:vavr-jackson:1.0.0"
+    implementation "tools.jackson.core:jackson-core:$jacksonVersion"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.21"
+    implementation "tools.jackson.core:jackson-databind:$jacksonVersion"
 
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
@@ -45,7 +43,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    testImplementation "org.assertj:assertj-core:3.27.3"
+    testImplementation "org.assertj:assertj-core:3.27.7"
     testImplementation "com.github.erosb:everit-json-schema:1.14.6"
 }
 

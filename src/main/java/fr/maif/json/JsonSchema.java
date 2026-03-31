@@ -1,8 +1,8 @@
 package fr.maif.json;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.StringNode;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import lombok.EqualsAndHashCode;
@@ -321,7 +321,7 @@ public interface JsonSchema {
         public ObjectNode toJson() {
             return Json.obj(
                     $$("type", "string"),
-                    $$("enum", Json.arr(List.of(enumClass.getEnumConstants()).map(Enum::name).map(TextNode::new)))
+                    $$("enum", Json.arr(List.of(enumClass.getEnumConstants()).map(Enum::name).map(StringNode::new)))
             );
         }
     }

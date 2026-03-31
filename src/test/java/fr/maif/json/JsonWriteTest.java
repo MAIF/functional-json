@@ -1,9 +1,9 @@
 package fr.maif.json;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.BooleanNode;
+import tools.jackson.databind.node.IntNode;
+import tools.jackson.databind.node.StringNode;
 import io.vavr.collection.List;
 import org.junit.jupiter.api.Test;
 
@@ -22,31 +22,31 @@ public class JsonWriteTest {
     @Test
     public void writeLocalDateIso() {
         JsonNode write = $localdate().write(LocalDate.of(2019, 2, 15));
-        assertThat(write).isEqualTo(new TextNode("2019-02-15"));
+        assertThat(write).isEqualTo(new StringNode("2019-02-15"));
     }
 
     @Test
     public void writeLocalDate() {
         JsonNode write = $localdate(DateTimeFormatter.BASIC_ISO_DATE).write(LocalDate.of(2019, 2, 15));
-        assertThat(write).isEqualTo(new TextNode("20190215"));
+        assertThat(write).isEqualTo(new StringNode("20190215"));
     }
 
     @Test
     public void writeLocalDateTimeIso() {
         JsonNode write = $localdatetime().write(LocalDateTime.of(2019, 2, 15, 0, 0, 0));
-        assertThat(write).isEqualTo(new TextNode("2019-02-15T00:00:00"));
+        assertThat(write).isEqualTo(new StringNode("2019-02-15T00:00:00"));
     }
 
     @Test
     public void writeLocalDateTime() {
         JsonNode write = $localdatetime(DateTimeFormatter.BASIC_ISO_DATE).write(LocalDateTime.of(2019, 2, 15, 0, 0, 0));
-        assertThat(write).isEqualTo(new TextNode("20190215"));
+        assertThat(write).isEqualTo(new StringNode("20190215"));
     }
 
     @Test
     public void writeString() {
         JsonNode write = $string().write("A string");
-        assertThat(write).isEqualTo(new TextNode("A string"));
+        assertThat(write).isEqualTo(new StringNode("A string"));
     }
 
     @Test
@@ -64,13 +64,13 @@ public class JsonWriteTest {
     @Test
     public void writeBigDecimal() {
         JsonNode write = $bigdecimal().write(BigDecimal.valueOf(5000, 3));
-        assertThat(write).isEqualTo(new TextNode("5.00"));
+        assertThat(write).isEqualTo(new StringNode("5.00"));
     }
 
     @Test
     public void writeEnum() {
         JsonNode write = JsonWrite.<TestEnum>$enum().write(TestEnum.test1);
-        assertThat(write).isEqualTo(new TextNode("test1"));
+        assertThat(write).isEqualTo(new StringNode("test1"));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class JsonWriteTest {
     @Test
     public void writeInstant() {
         JsonNode write = $instant().write(Instant.ofEpochMilli(3600123));
-        assertThat(write).isEqualTo(new TextNode("1970-01-01T01:00:00.123Z"));
+        assertThat(write).isEqualTo(new StringNode("1970-01-01T01:00:00.123Z"));
     }
 
     public enum TestEnum {
