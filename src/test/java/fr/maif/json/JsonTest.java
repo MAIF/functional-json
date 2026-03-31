@@ -1,8 +1,7 @@
 package fr.maif.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public class JsonTest {
     }
 
     @Test
-    public void readShouldReadObject() throws JsonProcessingException {
+    public void readShouldReadObject() {
         ObjectMapper mapper = new ObjectMapper();
         String json = "{\"name\": \"lodbrok\"}";
 
@@ -24,7 +23,7 @@ public class JsonTest {
     }
 
     @Test
-    public void readShouldReadParametrizedTypes() throws JsonProcessingException {
+    public void readShouldReadParametrizedTypes() {
         ObjectMapper mapper = new ObjectMapper();
         String json = "[{\"name\": \"lodbrok\"}, {\"name\": \"haraldson\"}]";
 

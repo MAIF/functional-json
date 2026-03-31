@@ -1,8 +1,8 @@
 package fr.maif.json;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.*;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.*;
 import io.vavr.API;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
@@ -94,14 +94,14 @@ public class JsonReadTest {
 
     @org.junit.jupiter.api.Test
     public void stringValid() {
-        JsResult<String> test = _string().read(new TextNode("test"));
+        JsResult<String> test = _string().read(new StringNode("test"));
         assertThat(test).isEqualTo(JsResult.success("test"));
         assertThat(_string().jsonSchema()).isEqualTo(JsonSchema.stringSchema());
     }
 
     @Test
     public void stringValidTransform() {
-        JsResult<String> test = _string(String::toUpperCase).read(new TextNode("test"));
+        JsResult<String> test = _string(String::toUpperCase).read(new StringNode("test"));
         assertThat(test).isEqualTo(JsResult.success("TEST"));
         assertThat(_string().jsonSchema()).isEqualTo(JsonSchema.stringSchema());
     }
@@ -136,7 +136,7 @@ public class JsonReadTest {
 
     @Test
     public void intInvalid() {
-        JsResult<Integer> test = _int().read(new TextNode("test"));
+        JsResult<Integer> test = _int().read(new StringNode("test"));
         assertThat(test).isEqualTo(JsResult.error(JsResult.Error.error("number.expected")));
     }
 
@@ -166,14 +166,14 @@ public class JsonReadTest {
     public void dateValid() {
         LocalDate date = LocalDate.now();
         JsonRead<LocalDate> localDateJsonRead = _localDate(DateTimeFormatter.ISO_LOCAL_DATE);
-        JsResult<LocalDate> test = localDateJsonRead.read(new TextNode(DateTimeFormatter.ISO_LOCAL_DATE.format(date)));
+        JsResult<LocalDate> test = localDateJsonRead.read(new StringNode(DateTimeFormatter.ISO_LOCAL_DATE.format(date)));
         assertThat(test).isEqualTo(JsResult.success(date));
         assertThat(localDateJsonRead.jsonSchema()).isEqualTo(JsonSchema.dateSchema());
     }
 
     @Test
     public void dateInvalid() {
-        JsResult<LocalDate> test = _localDate(DateTimeFormatter.ISO_LOCAL_DATE).read(new TextNode("test"));
+        JsResult<LocalDate> test = _localDate(DateTimeFormatter.ISO_LOCAL_DATE).read(new StringNode("test"));
         assertThat(test).isEqualTo(JsResult.error(JsResult.Error.error("pattern.invalid")));
     }
 
@@ -182,7 +182,7 @@ public class JsonReadTest {
     public void dateTimeValid() {
         LocalDateTime date = LocalDateTime.now();
         JsonRead<LocalDateTime> localDateJsonRead = _localDateTime(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        JsResult<LocalDateTime> test = localDateJsonRead.read(new TextNode(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)));
+        JsResult<LocalDateTime> test = localDateJsonRead.read(new StringNode(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)));
         assertThat(test).isEqualTo(JsResult.success(date));
         assertThat(localDateJsonRead.jsonSchema()).isEqualTo(JsonSchema.dateTimeSchema());
     }
@@ -191,7 +191,7 @@ public class JsonReadTest {
     public void isoLocalDateTimeValid() {
         LocalDateTime date = LocalDateTime.now();
         JsonRead<LocalDateTime> localDateJsonRead = _isoLocalDateTime();
-        JsResult<LocalDateTime> test = localDateJsonRead.read(new TextNode(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)));
+        JsResult<LocalDateTime> test = localDateJsonRead.read(new StringNode(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)));
         assertThat(test).isEqualTo(JsResult.success(date));
         assertThat(localDateJsonRead.jsonSchema()).isEqualTo(JsonSchema.dateTimeSchema());
     }
@@ -200,20 +200,20 @@ public class JsonReadTest {
     public void instantValid() {
         JsonRead<Instant> read = _instant();
         var instant = Instant.ofEpochSecond(345544L);
-        JsResult<Instant> test = read.read(new TextNode(DateTimeFormatter.ISO_INSTANT.format(instant)));
+        JsResult<Instant> test = read.read(new StringNode(DateTimeFormatter.ISO_INSTANT.format(instant)));
         assertThat(test).isEqualTo(JsResult.success(instant));
         assertThat(read.jsonSchema()).isEqualTo(JsonSchema.dateTimeSchema());
     }
 
     @Test
     public void instantInvalid() {
-        JsResult<Instant> test = _instant().read(new TextNode("c'est pas un boa ca ?"));
+        JsResult<Instant> test = _instant().read(new StringNode("c'est pas un boa ca ?"));
         assertThat(test).isEqualTo(JsResult.error(JsResult.Error.error("cannot.parse.into.instant")));
     }
 
     @Test
     public void dateTimeInvalid() {
-        JsResult<LocalDateTime> test = _localDateTime(DateTimeFormatter.ISO_LOCAL_DATE).read(new TextNode("test"));
+        JsResult<LocalDateTime> test = _localDateTime(DateTimeFormatter.ISO_LOCAL_DATE).read(new StringNode("test"));
         assertThat(test).isEqualTo(JsResult.error(JsResult.Error.error("pattern.invalid")));
     }
 
@@ -234,7 +234,7 @@ public class JsonReadTest {
 
     @Test
     public void booleanInvalid() {
-        JsResult<Boolean> test = _boolean().read(new TextNode("test"));
+        JsResult<Boolean> test = _boolean().read(new StringNode("test"));
         assertThat(test).isEqualTo(JsResult.error(JsResult.Error.error("boolean.expected")));
     }
 
@@ -371,7 +371,7 @@ public class JsonReadTest {
     @Test
     public void enumValid() {
         JsonRead<TestEnum> enumJsonRead = _enum(TestEnum.class);
-        JsResult<TestEnum> test = enumJsonRead.read(new TextNode("test1"));
+        JsResult<TestEnum> test = enumJsonRead.read(new StringNode("test1"));
         assertThat(test).isEqualTo(JsResult.success(TestEnum.test1));
         assertThat(enumJsonRead.jsonSchema()).isEqualTo(JsonSchema.enumSchema(TestEnum.class));
     }
@@ -386,20 +386,20 @@ public class JsonReadTest {
 
     @Test
     public void enumInvalid() {
-        JsResult<TestEnum> test = _enum(TestEnum.class).read(new TextNode("test"));
+        JsResult<TestEnum> test = _enum(TestEnum.class).read(new StringNode("test"));
         assertThat(test).isEqualTo(JsResult.error(JsResult.Error.error("invalid.enum.value", (Object[]) TestEnum.values())));
     }
 
     @Test
     public void bigDecimalValid() {
-        JsResult<BigDecimal> test = _bigDecimal().read(new TextNode("50.00"));
+        JsResult<BigDecimal> test = _bigDecimal().read(new StringNode("50.00"));
         assertThat(test).isEqualTo(JsResult.success(BigDecimal.valueOf(5000, 2)));
         assertThat(_bigDecimal().jsonSchema()).isEqualTo(JsonSchema.numberSchema());
     }
 
     @Test
     public void bigDecimalPatternInvalid() {
-        JsResult<BigDecimal> test = _bigDecimal().read(new TextNode("toto"));
+        JsResult<BigDecimal> test = _bigDecimal().read(new StringNode("toto"));
         assertThat(test).isEqualTo(JsResult.error(JsResult.Error.error("pattern.invalid")));
     }
 

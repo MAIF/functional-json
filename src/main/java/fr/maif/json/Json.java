@@ -1,21 +1,21 @@
 package fr.maif.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.json.JsonWriteFeature;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.LongNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.core.json.JsonWriteFeature;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectWriter;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.BooleanNode;
+import tools.jackson.databind.node.IntNode;
+import tools.jackson.databind.node.LongNode;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.StringNode;
 import io.vavr.collection.List;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
@@ -30,15 +30,13 @@ public class Json {
     private static ObjectMapper defaultObjectMapper = newDefaultMapper();
 
     public static ObjectMapper newDefaultMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new VavrModule());
-        mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new JavaTimeModule());
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_ABSENT);
-        return mapper;
+        return JsonMapper.builder()
+                .addModule(new VavrModule())
+                .configure(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+                .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_ABSENT))
+                .build();
     }
 
     /**
@@ -63,18 +61,14 @@ public class Json {
 
 
     private static String generateJson(Object o, boolean prettyPrint, boolean escapeNonASCII) {
-        try {
-            ObjectWriter writer = mapper().writer();
-            if (prettyPrint) {
-                writer = writer.with(SerializationFeature.INDENT_OUTPUT);
-            }
-            if (escapeNonASCII) {
-                writer = writer.with(JsonWriteFeature.ESCAPE_NON_ASCII);
-            }
-            return writer.writeValueAsString(o);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        ObjectWriter writer = mapper().writer();
+        if (prettyPrint) {
+            writer = writer.with(SerializationFeature.INDENT_OUTPUT);
         }
+        if (escapeNonASCII) {
+            writer = writer.with(JsonWriteFeature.ESCAPE_NON_ASCII);
+        }
+        return writer.writeValueAsString(o);
     }
 
     /**
@@ -201,7 +195,7 @@ public class Json {
     }
 
     public static ObjectNode merge(ObjectNode obj, ObjectNode obj2) {
-        obj.fields().forEachRemaining(e ->
+        obj.properties().forEach(e ->
             obj2.set(e.getKey(), e.getValue())
         );
         return obj2;
@@ -261,7 +255,7 @@ public class Json {
      */
     public static ArrayNode arr(String ...nodes) {
         ArrayNode obj = newArray();
-        List.of(nodes).map(TextNode::new).forEach(obj::add);
+        List.of(nodes).map(StringNode::new).forEach(obj::add);
         return obj;
     }
 
@@ -309,7 +303,7 @@ public class Json {
      * @return the field name / value pair
      */
     public static JsPair $(String field, Option<String> value) {
-        return new JsPair(field, value.map(TextNode::new));
+        return new JsPair(field, value.map(StringNode::new));
     }
     /**
      * An object field for a string option.

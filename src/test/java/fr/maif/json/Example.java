@@ -1,6 +1,6 @@
 package fr.maif.json;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
