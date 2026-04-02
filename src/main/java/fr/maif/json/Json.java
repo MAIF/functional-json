@@ -20,6 +20,7 @@ import io.vavr.collection.List;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
 import io.vavr.jackson.datatype.VavrModule;
+import tools.jackson.datatype.jsonp.JSONPModule;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -32,6 +33,7 @@ public class Json {
     public static ObjectMapper newDefaultMapper() {
         return JsonMapper.builder()
                 .addModule(new VavrModule())
+                .addModule(new JSONPModule())
                 .configure(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
