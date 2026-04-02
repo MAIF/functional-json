@@ -11,9 +11,11 @@ group = 'fr.maif'
 ext {
     vavrVersion = "1.0.1"
     jacksonVersion = "3.1.1"
+    jakartaJsonVersion = "2.0.0"
     lombokVersion = "1.18.44"
     jupiterVersion = "5.13.1"
 }
+
 repositories {
     mavenCentral()
 }
@@ -36,6 +38,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.21"
     implementation "tools.jackson.datatype:jackson-datatype-jakarta-jsonp:$jacksonVersion"
     implementation "tools.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "org.glassfish:jakarta.json:$jakartaJsonVersion"
 
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"

@@ -1,28 +1,18 @@
 package fr.maif.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import tools.jackson.core.json.JsonWriteFeature;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.DeserializationFeature;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.ObjectWriter;
-import tools.jackson.databind.SerializationFeature;
-import tools.jackson.databind.cfg.DateTimeFeature;
-import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.databind.node.ArrayNode;
-import tools.jackson.databind.node.BooleanNode;
-import tools.jackson.databind.node.IntNode;
-import tools.jackson.databind.node.LongNode;
-import tools.jackson.databind.node.ObjectNode;
-import tools.jackson.databind.node.StringNode;
 import io.vavr.collection.List;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
 import io.vavr.jackson.datatype.VavrModule;
+import tools.jackson.core.json.JsonWriteFeature;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.*;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.*;
 import tools.jackson.datatype.jsonp.JSONPModule;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.StringJoiner;
 
