@@ -1179,7 +1179,15 @@ public interface JsonRead<T> {
      * @return the reader
      */
     static JsonRead<Long> _long() {
-        return JsonRead.of(json -> JsResult.success(json.asLong()), JsonSchema.numberSchema());
+        return JsonRead.of(json -> {
+                    if (!Objects.isNull(json) && json.isNumber()) {
+                        return JsResult.success(json.asLong());
+                    } else {
+                        return JsResult.error(JsResult.Error.error("number.expected"));
+                    }
+                },
+                JsonSchema.numberSchema()
+        );
     }
 
     /**
